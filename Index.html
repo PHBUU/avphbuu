@@ -1,23 +1,173 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-  <base target="_top">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title><?= appName ?></title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
-  <?!= include('Styles'); ?>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ฝ่ายโสตทัศนูปกรณ์ · คณะสาธารณสุขศาสตร์</title>
+<meta name="robots" content="noindex">
+<script>
+  /* ===== ตั้งค่า: วาง URL เว็บแอป GAS (ที่ลงท้าย /exec) ===== */
+  var CONFIG = {
+    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbxcVC0Gs3dGIYe1elAbMx823I_kTHiOfJkxFD6oDe54mKfUVvApysamvX3QrIvuS2SK3A/exec',
+    ORG: 'ฝ่ายโสตทัศนูปกรณ์',
+    SUB: 'คณะสาธารณสุขศาสตร์ มหาวิทยาลัยบูรพา'
+  };
+  /* ===== มีพารามิเตอร์ (?room= ?id= ?t= ?page=) = มาจาก QR → พาไปเว็บแอปทันที ===== */
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var keys = ['room', 'id', 't', 'page', 'check'];
+    var hit = keys.some(function (k) { return q.has(k); });
+    var ready = CONFIG.GAS_URL.indexOf('วาง_ID') < 0;
+    window.__REDIRECT__ = hit ? CONFIG.GAS_URL + location.search : '';
+    if (hit && ready) location.replace(window.__REDIRECT__);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F8;--surface:#fff;--line:#E2E6EA;--ink:#1B2128;--ink-2:#3D4752;--muted:#5B6672;--accent:#0B6E6E;--accent-ink:#084F4F;--accent-soft:#E3F2F1;--warn-bg:#FDF1DC;--warn:#6B4100}
+:root:not([data-theme="light"]){color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Thai',system-ui,sans-serif;line-height:1.55}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header.top{background:var(--accent);color:#fff}
+header.top .wrap{display:flex;align-items:center;gap:12px;padding:20px 16px}
+.mark{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:none}
+.ico{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+h1{margin:0;font-size:22px;font-weight:600;line-height:1.3} h2{margin:0;font-size:18px;font-weight:600}
+.sub{font-size:14px;opacity:.9}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.tile{display:flex;flex-direction:column;gap:8px;padding:16px;min-height:128px;border-radius:16px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink)}
+.tile:hover{border-color:#AEB8C2;color:var(--ink)}
+.tile .t{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.tile b{font-size:16px;font-weight:600} .tile small{font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px}
+.notice{border-radius:12px;padding:12px 14px;font-size:14px;background:var(--warn-bg);color:var(--warn);margin-top:16px}
+.muted{color:var(--muted)} .small{font-size:14px} .xs{font-size:12px}
+.field{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--ink-2);margin-top:12px}
+.input,select,textarea{width:100%;min-height:46px;padding:10px 12px;border:1px solid #CDD3D9;border-radius:10px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #CDD3D9;background:#fff;color:var(--ink);font:inherit;font-size:15px;cursor:pointer;text-decoration:none}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn-primary:hover{background:var(--accent-ink);color:#fff}
+details summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:44px}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'+';font-size:22px;color:var(--muted)} details[open] summary::after{content:'−'}
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:16px}
+.sticker{border:1px dashed #AEB8C2;border-radius:12px;padding:12px;background:#fff;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;break-inside:avoid}
+.sticker .qr{width:140px;height:140px} .sticker .qr svg{width:100%;height:100%;display:block}
+.sticker b{font-size:15px} .sticker small{font-size:12px;color:var(--ink-2);word-break:break-all}
+.redirect{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+.spinner{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+:focus-visible{outline:3px solid #7CC4C0;outline-offset:2px}
+@media print{header.top,.no-print{display:none!important}body{background:#fff}.wrap{max-width:none;padding:0}.stickers{grid-template-columns:repeat(3,1fr);gap:6mm}.sticker{border:1px solid #999}}
+</style>
 </head>
 <body>
-  <div id="app">
-    <div class="boot"><div class="spinner" aria-hidden="true"></div><p>กำลังโหลด…</p></div>
-  </div>
-  <div id="modal-root"></div>
-  <div id="toast" role="status" aria-live="polite"></div>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
-  <script>window.__ROUTE__ = <?!= route ?>;</script>
-  <?!= include('App'); ?>
+<div id="redirect" class="wrap redirect" hidden>
+  <div class="spinner" aria-hidden="true"></div>
+  <p>กำลังพาไปยังระบบงานโสต…</p>
+  <a class="btn btn-primary" id="goLink" href="#">ถ้าไม่ไปเอง แตะที่นี่</a>
+  <p class="xs muted" id="notReady" hidden>ยังไม่ได้ตั้งค่า GAS_URL ในไฟล์ index.html</p>
+</div>
+
+<div id="home">
+  <header class="top"><div class="wrap">
+    <span class="mark"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4"/></svg></span>
+    <div><h1 id="orgName">ฝ่ายโสตทัศนูปกรณ์</h1><div class="sub" id="orgSub"></div></div>
+  </div></header>
+
+  <main class="wrap">
+    <div class="notice no-print" id="cfgWarn" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน CONFIG.GAS_URL ของไฟล์ index.html ปุ่มด้านล่างจะยังใช้ไม่ได้</div>
+
+    <nav class="tiles no-print" aria-label="บริการ">
+      <a class="tile" data-page="borrow" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span><b>ยืมอุปกรณ์</b><small>ไมค์ โปรเจคเตอร์ ลำโพง กล้อง</small></a>
+      <a class="tile" data-page="pickRoom" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><b>แจ้งปัญหาห้องเรียน</b><small>ภาพไม่ขึ้น เสียงไม่มา ไมค์เสีย</small></a>
+      <a class="tile" data-page="rooms" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14" cy="12" r="1"/></svg></span><b>สถานะห้องเรียน</b><small>ห้องไหนพร้อมใช้ ห้องไหนกำลังซ่อม</small></a>
+      <a class="tile" data-page="service" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><b>ขอใช้บริการ</b><small>จัดห้องประชุม ถ่ายภาพ ไลฟ์ ผลิตสื่อ</small></a>
+    </nav>
+
+    <p class="small muted no-print" style="margin-top:16px">เห็น QR ในห้องเรียนหรือบนอุปกรณ์ สแกนด้วยกล้องมือถือได้เลย ไม่ต้องลงแอป</p>
+
+    <details class="card no-print" id="maker">
+      <summary>ทำลิงก์และ QR (สำหรับเจ้าหน้าที่)</summary>
+      <p class="small muted">QR ทุกอันชี้มาที่หน้านี้ แล้วหน้านี้พาต่อไปยังเว็บแอป ถ้าวันหลัง URL เว็บแอปเปลี่ยน แก้ GAS_URL ที่เดียว สติกเกอร์เดิมยังใช้ได้</p>
+      <label class="field">ชนิดลิงก์
+        <select id="mkType">
+          <option value="room">ห้อง → หน้าแจ้งปัญหาห้อง (?room=)</option>
+          <option value="id">อุปกรณ์ → หน้าอุปกรณ์ (?id=)</option>
+          <option value="page">หน้าในระบบ (?page=)</option>
+        </select>
+      </label>
+      <label class="field">รายการ บรรทัดละ 1 รายการ ใส่ชื่อบนสติกเกอร์หลังเครื่องหมาย |
+        <textarea id="mkList" placeholder="301 | ห้อง 301&#10;302 | ห้อง 302&#10;M1 | ห้องประชุม 1"></textarea>
+      </label>
+      <p class="xs muted" id="mkHint">รหัสห้องต้องตรงกับคอลัมน์ roomId ในชีต Rooms</p>
+      <div class="row"><button type="button" class="btn btn-primary" id="mkGo">สร้าง QR</button><button type="button" class="btn" id="mkPrint" hidden>พิมพ์</button></div>
+    </details>
+
+    <div id="mkOut" class="stickers"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var ready = CONFIG.GAS_URL.indexOf('วาง_ID') < 0;
+
+  if (window.__REDIRECT__) {
+    $('#home').hidden = true;
+    $('#redirect').hidden = false;
+    $('#goLink').href = window.__REDIRECT__;
+    if (!ready) $('#notReady').hidden = false;
+    return;
+  }
+
+  $('#orgName').textContent = CONFIG.ORG;
+  $('#orgSub').textContent = CONFIG.SUB;
+  if (!ready) $('#cfgWarn').hidden = false;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-page]'), function (a) {
+    a.href = CONFIG.GAS_URL + '?page=' + encodeURIComponent(a.dataset.page);
+  });
+
+  var base = location.origin + location.pathname;
+  var hints = {
+    room: 'รหัสห้องต้องตรงกับคอลัมน์ roomId ในชีต Rooms',
+    id: 'รหัสต้องตรงกับคอลัมน์ code ในชีต Assets เช่น AV-MIC-01',
+    page: 'ใช้ได้: borrow, pickRoom, rooms, service, mine'
+  };
+  $('#mkType').addEventListener('change', function () { $('#mkHint').textContent = hints[this.value]; });
+
+  function qrSvg(text) {
+    var q = qrcode(0, 'M');
+    q.addData(text);
+    q.make();
+    return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  }
+
+  $('#mkGo').addEventListener('click', function () {
+    var type = $('#mkType').value;
+    var lines = $('#mkList').value.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    if (!lines.length) { $('#mkList').focus(); return; }
+    var subs = { room: 'สแกนเพื่อแจ้งปัญหาอุปกรณ์ในห้องนี้', id: 'สแกนเพื่อยืมหรือดูข้อมูลอุปกรณ์', page: 'สแกนเพื่อเปิดระบบงานโสต' };
+    $('#mkOut').innerHTML = lines.map(function (line) {
+      var parts = line.split('|');
+      var code = parts[0].trim();
+      var label = (parts[1] || code).trim();
+      var url = base + '?' + type + '=' + encodeURIComponent(code);
+      return '<div class="sticker"><div class="qr">' + qrSvg(url) + '</div><b>' + esc(label) + '</b><small>' + esc(subs[type]) + '</small><small class="muted">' + esc(url) + '</small></div>';
+    }).join('');
+    $('#mkPrint').hidden = false;
+    $('#mkOut').scrollIntoView({ behavior: 'smooth' });
+  });
+  $('#mkPrint').addEventListener('click', function () { window.print(); });
+})();
+</script>
 </body>
 </html>
