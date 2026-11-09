@@ -17,7 +17,7 @@
 <script>
   /* ===== ตั้งค่า: วาง URL เว็บแอป GAS (ที่ลงท้าย /exec) ===== */
   var CONFIG = {
-    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbxMPHvxLbzslUUTbVDcRTNJyxojeBT619N_FA4O_eR_Oa8RS-aGgI0-cZfFd7wAmcOsIw/exec',
+    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbyQ-5Ow28xjhGaODmliA923x4ELLhBzCgBj_sm8i1kNVDvoHWfIIgx7hztR8NjDAjZD5Q/exec',
     APP: 'ฝ่ายโสตฯ',
     DOMAIN: 'go.buu.ac.th',
     ORG: 'ฝ่ายโสตทัศนูปกรณ์ · คณะสาธารณสุขศาสตร์'
@@ -31,6 +31,12 @@
     window.__REDIRECT__ = hit ? CONFIG.GAS_URL + location.search : '';
     if (hit && ready) location.replace(window.__REDIRECT__);
   })();
+  /* Android/Chrome: เก็บสัญญาณ "ติดตั้งได้" ไว้ใช้ตอนผู้ใช้กดปุ่มติดตั้ง */
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    window.__BIP__ = e;
+    document.dispatchEvent(new Event('av-installable'));
+  });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -123,15 +129,48 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
 .cell-txt small{display:block;font-size:13px;color:var(--muted);line-height:1.4}
 .chev{width:18px;height:18px;color:var(--muted);opacity:.7}
 
-/* add to home screen */
-.a2hs{display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px;border-radius:16px;background:var(--card)}
-.a2hs .app-icon{width:44px;height:44px;border-radius:11px;flex:none}
-.a2hs .app-icon .ico{width:24px;height:24px}
-.a2hs b{display:block;font-size:15px;font-weight:600}
-.a2hs small{display:block;font-size:13px;color:var(--muted);line-height:1.45}
-.a2hs .share{width:16px;height:16px;vertical-align:-3px;color:#0A84FF}
-.x{width:36px;height:36px;border:none;border-radius:50%;background:var(--press);color:var(--muted);font:inherit;font-size:18px;cursor:pointer;flex:none}
+/* ติดตั้งเป็นแอป: การ์ดแบบแบนเนอร์ App Store */
+.install{display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px;border-radius:18px;background:var(--card)}
+.install .app-icon{width:52px;height:52px;border-radius:12px;flex:none;box-shadow:0 6px 14px -8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.25)}
+.install .app-icon .ico{width:28px;height:28px}
+.install-txt{flex:1;min-width:0}
+.install b{display:block;font-size:15px;font-weight:600}
+.install small{display:block;font-size:13px;color:var(--muted);line-height:1.45}
+.get{flex:none;min-height:36px;padding:0 18px;border:none;border-radius:999px;background:#C9480A;color:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.get:active{opacity:.75}
+.x{width:36px;height:36px;border:none;border-radius:50%;background:var(--press);color:var(--muted);font:inherit;font-size:18px;line-height:1;cursor:pointer;flex:none}
 .foot{margin:26px 0 0;text-align:center;font-size:12px;color:var(--muted)}
+
+/* แผ่นคำแนะนำติดตั้ง (bottom sheet) */
+.sheet-bg{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.42);opacity:0;transition:opacity .22s}
+.sheet-bg.show{opacity:1}
+.sheet{width:100%;max-width:520px;max-height:92vh;max-height:92dvh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:8px 20px calc(22px + var(--safe-b));transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.sheet-bg.show .sheet{transform:none}
+.grab{width:38px;height:5px;border-radius:3px;background:var(--sep);margin:0 auto 14px}
+.sh-head{display:flex;align-items:center;gap:12px}
+.sh-head .app-icon{width:58px;height:58px;border-radius:14px;flex:none;box-shadow:0 8px 18px -10px rgba(234,88,12,.8)}
+.sh-head .app-icon .ico{width:30px;height:30px}
+.sh-head div{flex:1;min-width:0}
+.sh-head h2{margin:0;font-size:19px;font-weight:600;line-height:1.3}
+.sh-head p{margin:2px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.steps{list-style:none;margin:18px 0 0;padding:0;background:var(--card);border-radius:16px;overflow:hidden;counter-reset:s}
+.steps li{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;font-size:15px;line-height:1.6;counter-increment:s}
+.steps li + li{border-top:1px solid var(--sep)}
+.steps li::before{content:counter(s);width:26px;height:26px;margin-top:1px;border-radius:50%;background:rgba(201,72,10,.13);color:var(--accent);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none}
+.k{display:inline-flex;align-items:center;gap:5px;margin:0 2px;padding:0 9px;border-radius:8px;background:var(--press);font-weight:500;white-space:nowrap;line-height:1.75}
+.k .ico{width:17px;height:17px}
+.k .blue{color:#0A84FF}
+.sh-note{display:flex;gap:8px;margin:14px 2px 0;font-size:13px;color:var(--muted);line-height:1.5}
+.sh-note .ico{width:18px;height:18px;flex:none;margin-top:1px}
+.sh-actions{display:grid;gap:10px;margin-top:18px}
+.btn-main,.btn-soft{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 16px;border:none;border-radius:14px;font:inherit;font-size:16px;cursor:pointer}
+.btn-main{background:#C9480A;color:#fff;font-weight:600}
+.btn-soft{background:var(--card);color:var(--accent);font-weight:500}
+.btn-main:active,.btn-soft:active{opacity:.8}
+.btn-main .ico,.btn-soft .ico{width:20px;height:20px}
+
+.toast{position:fixed;left:50%;bottom:calc(86px + var(--safe-b));z-index:60;max-width:calc(100% - 32px);transform:translate(-50%,20px);padding:11px 18px;border-radius:14px;background:rgba(28,28,30,.94);color:#fff;font-size:14px;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--tab);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--tab-line);padding-bottom:var(--safe-b)}
@@ -166,6 +205,13 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
   .wb-nav a.on{background:rgba(201,72,10,.12);color:var(--accent);font-weight:600}
   .wb-cta{flex:none;padding:10px 18px;border-radius:12px;background:#C9480A;color:#fff;font-size:14px;font-weight:500}
   .wb-cta:hover{background:#A93C08}
+  .wb-install{flex:none;display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid var(--sep);border-radius:12px;background:transparent;color:var(--ink-2);font:inherit;font-size:14px;cursor:pointer}
+  .wb-install:hover{background:var(--press)}
+  .wb-install .ico{width:18px;height:18px}
+  .sheet-bg{align-items:center;padding:24px}
+  .sheet{border-radius:24px;padding:22px 26px 26px;transform:translateY(16px) scale(.98)}
+  .grab{display:none}
+  .toast{bottom:32px}
   .home{max-width:1180px;padding:44px 32px 40px}
   .top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:center}
   h1{font-size:46px}
@@ -216,6 +262,7 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
       <a data-page="service" href="#">ขอใช้บริการ</a>
       <a data-page="mine" href="#">รายการของฉัน</a>
     </nav>
+    <button type="button" class="wb-install" id="wbInstall" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>ติดตั้งแอป</button>
     <a class="wb-cta" data-page="" href="#">สำหรับเจ้าหน้าที่</a>
   </div>
 </header>
@@ -259,17 +306,24 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
     <li><a class="cell" data-page="" href="#"><span class="cell-ico g-indigo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="cell-txt"><span><b>สำหรับเจ้าหน้าที่</b><small>หน้ารวมงานโสต ยืม-คืน งานซ่อม</small></span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></span></a></li>
   </ul>
 
-  <div class="a2hs rise" id="a2hs" hidden>
+  <!-- ปุ่มติดตั้งเป็นแอป: Android กดแล้วขึ้นหน้าต่างติดตั้งของระบบ, iPhone เปิดแผ่นบอกขั้นตอน -->
+  <div class="install rise" id="installCard" hidden>
     <span class="app-icon" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4"/></svg></span>
-    <div style="flex:1;min-width:0">
-      <b>ใช้เหมือนแอปบน iPhone</b>
-      <small>แตะ <svg class="ico share" viewBox="0 0 24 24" aria-label="ปุ่มแชร์"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg> แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"</small>
+    <div class="install-txt">
+      <b>แอปฝ่ายโสตฯ</b>
+      <small id="installSub">ติดตั้งไว้บนหน้าจอโฮม เปิดได้ในแตะเดียว</small>
     </div>
-    <button type="button" class="x" id="a2hsClose" aria-label="ปิดคำแนะนำ">×</button>
+    <button type="button" class="get" id="installBtn">ติดตั้ง</button>
+    <button type="button" class="x" id="installClose" aria-label="ซ่อนปุ่มติดตั้ง">×</button>
   </div>
 
   <p class="foot">ฝ่ายโสตทัศนูปกรณ์ คณะสาธารณสุขศาสตร์ มหาวิทยาลัยบูรพา</p>
 </div>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <nav class="tabbar" id="tabbar" aria-label="เมนูหลัก">
   <div class="tabbar-in">
@@ -321,17 +375,232 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
     a.href = p ? CONFIG.GAS_URL + '?page=' + encodeURIComponent(p) : CONFIG.GAS_URL;
   });
 
-  /* คำแนะนำ "เพิ่มไปยังหน้าจอโฮม" เฉพาะ iPhone/iPad ที่ยังไม่ได้ติดตั้ง */
+  /* ================= ติดตั้งเป็นแอปบนมือถือ =================
+     Android (Chrome/Samsung/Edge): กดปุ่มแล้วขึ้นหน้าต่าง "ติดตั้ง" ของระบบทันที
+     iPhone/iPad: Apple ไม่เปิดให้เว็บสั่งติดตั้งเอง จึงเปิดแผ่นบอกขั้นตอน (แชร์ → เพิ่มไปยังหน้าจอโฮม)
+     เปิดจาก LINE/Facebook: พาไปเปิดใน Safari/Chrome ก่อน เพราะแอปพวกนี้เพิ่มไอคอนลงหน้าจอไม่ได้ */
   var ua = navigator.userAgent;
-  var iOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  var standalone = window.navigator.standalone === true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
-  var dismissed = false;
-  try { dismissed = localStorage.getItem('a2hs-off') === '1'; } catch (e) { /* ไม่มี storage */ }
-  if (iOS && !standalone && !dismissed) $('#a2hs').hidden = false;
-  $('#a2hsClose').addEventListener('click', function () {
-    $('#a2hs').hidden = true;
-    try { localStorage.setItem('a2hs-off', '1'); } catch (e) { /* ไม่มี storage */ }
+  var iPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var iOS = iPad || /iPhone|iPod/.test(ua);
+  var android = /Android/i.test(ua);
+  var mobile = iOS || android;
+  var isLine = /\bLine\//.test(ua);
+  var inApp = isLine || /FBAN|FBAV|FB_IAB|Instagram|Messenger|TikTok|MicroMessenger|KAKAOTALK|; wv\)/.test(ua);
+  var iosOther = iOS && /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  var samsung = /SamsungBrowser/.test(ua);
+  var safariVer = parseInt((ua.match(/Version\/(\d+)/) || [])[1], 10) || 0;
+  var standalone = window.navigator.standalone === true ||
+    (window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches));
+  var SNOOZE_DAYS = 30;
+
+  function store(k, v) {
+    try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { /* ไม่มี storage */ }
+    return null;
+  }
+  var installed = store('av-installed') === '1';
+  var snoozed = Date.now() - (parseInt(store('av-install-off'), 10) || 0) < SNOOZE_DAYS * 864e5;
+
+  var card = $('#installCard'), wbBtn = $('#wbInstall');
+  var bg = $('#sheetBg'), sheet = $('#sheet'), sheetOpen = false, lastFocus = null, toastTimer = null;
+
+  var I = {
+    proj: '<rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4"/>',
+    share: '<path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>',
+    dots: '<circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/>',
+    vdots: '<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>',
+    addsq: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/>',
+    menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    get: '<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    ext: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>',
+    copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/>'
+  };
+  function svg(name, cls) { return '<svg class="ico' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + I[name] + '</svg>'; }
+  /* ป้ายปุ่มที่ผู้ใช้ต้องหาบนจอ เช่น [แชร์] [เพิ่มไปยังหน้าจอโฮม] */
+  function k(label, icon, blue, aria) {
+    return '<span class="k"' + (aria ? ' role="img" aria-label="' + aria + '"' : '') + '>' + (icon ? svg(icon, blue ? 'blue' : '') : '') + (label || '') + '</span>';
+  }
+  function pageUrl() { return location.origin + location.pathname; }
+
+  function toast(msg) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3400);
+  }
+
+  function refreshInstallUi() {
+    var can = !!window.__BIP__;
+    card.hidden = standalone || installed || snoozed || !mobile;
+    wbBtn.hidden = standalone || installed || !can;
+    $('#installSub').textContent = inApp ? 'เปิดใน ' + (iOS ? 'Safari' : 'Chrome') + ' แล้วติดตั้งไว้บนหน้าจอ'
+      : iOS ? 'เพิ่มไว้บนหน้าจอโฮม เปิดได้ในแตะเดียว' : 'ติดตั้งไว้บนหน้าจอหลัก เปิดได้ในแตะเดียว';
+  }
+
+  function sheetHtml() {
+    var title, sub, steps = [], note = '', acts = [];
+    var can = !!window.__BIP__;
+    var br = iOS ? 'Safari' : 'Chrome';
+    if (can && !inApp) {
+      title = 'ติดตั้งแอปฝ่ายโสตฯ';
+      sub = 'กด "ติดตั้งเลย" แล้วยืนยันในหน้าต่างที่ขึ้นมา ไอคอนจะอยู่บน' + (android ? 'หน้าจอหลัก' : 'เครื่องนี้');
+      acts.push('<button type="button" class="btn-main" data-act="install">' + svg('get') + 'ติดตั้งเลย</button>');
+      acts.push('<button type="button" class="btn-soft" data-act="close">ไว้ทีหลัง</button>');
+    } else if (inApp) {
+      title = 'เปิดใน ' + br + ' ก่อน';
+      sub = (isLine ? 'LINE' : 'แอปนี้') + ' เพิ่มไอคอนลงหน้าจอให้ไม่ได้ ต้องติดตั้งผ่าน ' + br;
+      if (isLine) acts.push('<a class="btn-main" href="' + pageUrl() + '?openExternalBrowser=1#install">' + svg('ext') + 'เปิดใน ' + br + '</a>');
+      steps = [
+        (isLine ? 'ถ้าปุ่มด้านล่างไม่ทำงาน ' : '') + 'แตะ ' + k('', 'dots', false, 'ปุ่มเมนู') + ' หรือ ' + k('', 'vdots', false, 'ปุ่มเมนู') + ' ที่มุมขวาบน',
+        'เลือก ' + k('เปิดใน ' + br) + ' หรือ ' + k('เปิดในเบราว์เซอร์อื่น'),
+        'หน้านี้จะเปิดใน ' + br + ' แล้วกดปุ่ม ' + k('ติดตั้ง') + ' อีกครั้ง'
+      ];
+      acts.push('<button type="button" class="btn-soft" data-act="copy">' + svg('copy') + 'คัดลอกลิงก์ไปวางใน ' + br + '</button>');
+    } else if (iOS) {
+      title = 'เพิ่มแอปไว้บนหน้าจอโฮม';
+      sub = (iPad ? 'iPad' : 'iPhone') + ' ติดตั้งจากเมนูแชร์ ทำครั้งเดียว ใช้เวลาไม่ถึง 10 วินาที';
+      if (iosOther) {
+        steps.push('แตะ ' + k('แชร์', 'share', true) + ' ที่แถบที่อยู่ด้านบน (ถ้าไม่เห็น ให้แตะ ' + k('', 'dots', false, 'ปุ่มเมนู') + ' ก่อน)');
+        steps.push('แตะ ' + k('เพิ่มไปยังหน้าจอโฮม', 'addsq') + ' (ถ้าไม่เห็น ให้เลื่อนลงหรือแตะ "ดูเพิ่มเติม")');
+      } else {
+        steps.push(safariVer >= 26
+          ? 'แตะ ' + k('', 'dots', false, 'ปุ่มสามจุด') + ' ข้างช่องที่อยู่ แล้วแตะ ' + k('แชร์', 'share', true)
+          : 'แตะ ' + k('แชร์', 'share', true) + (iPad ? ' ที่มุมขวาบน' : ' ที่แถบด้านล่างของ Safari'));
+        steps.push('เลื่อนลงแล้วแตะ ' + k('เพิ่มไปยังหน้าจอโฮม', 'addsq'));
+      }
+      steps.push('เปิดสวิตช์ "เปิดเป็นเว็บแอป" ไว้ (ถ้ามี) แล้วแตะ ' + k('เพิ่ม') + ' ที่มุมขวาบน');
+      note = 'ครั้งแรกที่เปิดจากไอคอน อาจต้องเข้าสู่ระบบด้วยบัญชี @' + CONFIG.DOMAIN + ' อีกครั้ง';
+      acts.push('<button type="button" class="btn-main" data-act="close">เข้าใจแล้ว</button>');
+      acts.push('<button type="button" class="btn-soft" data-act="done">เพิ่มแล้ว · ซ่อนปุ่มนี้</button>');
+    } else if (android) {
+      title = 'ติดตั้งแอปไว้บนหน้าจอหลัก';
+      sub = 'ทำครั้งเดียว ไม่ต้องโหลดจาก Play Store';
+      steps = samsung ? [
+        'แตะ ' + k('', 'menu', false, 'ปุ่มเมนู') + ' ที่แถบด้านล่าง',
+        'แตะ ' + k('เพิ่มหน้าลงใน', 'addsq') + ' แล้วเลือก ' + k('หน้าจอหลัก'),
+        'แตะ ' + k('เพิ่ม') + ' ไอคอนจะขึ้นบนหน้าจอหลัก'
+      ] : [
+        'แตะ ' + k('', 'vdots', false, 'ปุ่มเมนูสามจุด') + ' ที่มุมขวาบนของ Chrome',
+        'เลือก ' + k('ติดตั้งแอป', 'get') + ' หรือ ' + k('เพิ่มลงในหน้าจอหลัก', 'addsq'),
+        'แตะ ' + k('ติดตั้ง') + ' ไอคอนจะขึ้นบนหน้าจอหลัก'
+      ];
+      acts.push('<button type="button" class="btn-main" data-act="close">เข้าใจแล้ว</button>');
+    } else {
+      title = 'ติดตั้งบนมือถือ';
+      sub = 'บนคอมพิวเตอร์ใช้ผ่านเว็บได้เลย ถ้าจะติดตั้งเป็นแอป ให้เปิดหน้านี้บนมือถือแล้วกดปุ่ม "ติดตั้ง"';
+      acts.push('<button type="button" class="btn-soft" data-act="copy">' + svg('copy') + 'คัดลอกลิงก์</button>');
+      acts.push('<button type="button" class="btn-main" data-act="close">ปิด</button>');
+    }
+    return '<div class="grab" aria-hidden="true"></div>' +
+      '<div class="sh-head"><span class="app-icon" aria-hidden="true">' + svg('proj') + '</span>' +
+      '<div><h2 id="shTitle">' + title + '</h2><p>' + sub + '</p></div>' +
+      '<button type="button" class="x" data-act="close" aria-label="ปิด">×</button></div>' +
+      (steps.length ? '<ol class="steps">' + steps.map(function (s) { return '<li><span>' + s + '</span></li>'; }).join('') + '</ol>' : '') +
+      (note ? '<p class="sh-note">' + svg('info') + '<span>' + note + '</span></p>' : '') +
+      '<div class="sh-actions">' + acts.join('') + '</div>';
+  }
+
+  function openSheet(opener) {
+    lastFocus = opener || document.activeElement;
+    sheet.innerHTML = sheetHtml();
+    bg.hidden = false;
+    sheetOpen = true;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { requestAnimationFrame(function () { bg.classList.add('show'); }); });
+    var f = sheet.querySelector('.btn-main') || sheet.querySelector('.x');
+    if (f) f.focus({ preventScroll: true });
+  }
+  function closeSheet() {
+    if (!sheetOpen) return;
+    sheetOpen = false;
+    bg.classList.remove('show');
+    document.body.style.overflow = '';
+    setTimeout(function () { if (!sheetOpen) bg.hidden = true; }, 320);
+    if (lastFocus && lastFocus.focus && !lastFocus.hidden) lastFocus.focus({ preventScroll: true });
+  }
+
+  function install(opener) {
+    var p = window.__BIP__;
+    if (!p || inApp) return openSheet(opener);
+    window.__BIP__ = null;
+    closeSheet();
+    p.prompt();
+    p.userChoice.then(function (c) {
+      if (c && c.outcome === 'accepted') markInstalled();
+      else toast('ยังไม่ได้ติดตั้ง กดปุ่ม "ติดตั้ง" ใหม่ได้ทุกเมื่อ');
+      refreshInstallUi();
+    }, function () { refreshInstallUi(); });
+  }
+  function markInstalled() {
+    if (installed) return;
+    installed = true;
+    store('av-installed', '1');
+    refreshInstallUi();
+    closeSheet();
+    toast('ติดตั้งแล้ว ไอคอน "' + CONFIG.APP + '" อยู่บนหน้าจอ' + (iOS ? 'โฮม' : 'หลัก'));
+  }
+  function copyLink() {
+    var u = pageUrl() + '#install';
+    var ok = function () { toast('คัดลอกลิงก์แล้ว ไปวางในเบราว์เซอร์ได้เลย'); };
+    var fallback = function () {
+      var t = document.createElement('textarea');
+      t.value = u; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { if (document.execCommand('copy')) ok(); else toast(u); } catch (e) { toast(u); }
+      t.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, fallback); else fallback();
+  }
+
+  $('#installBtn').addEventListener('click', function (e) { install(e.currentTarget); });
+  wbBtn.addEventListener('click', function (e) { install(e.currentTarget); });
+  $('#installClose').addEventListener('click', function () {
+    snoozed = true;
+    store('av-install-off', String(Date.now()));
+    refreshInstallUi();
+    toast('ซ่อนแล้ว จะแสดงอีกครั้งใน ' + SNOOZE_DAYS + ' วัน');
   });
+  bg.addEventListener('click', function (e) {
+    if (e.target === bg) return closeSheet();
+    var a = e.target.closest('[data-act]');
+    if (!a) return;
+    var act = a.getAttribute('data-act');
+    if (act === 'close') closeSheet();
+    else if (act === 'install') install();
+    else if (act === 'copy') copyLink();
+    else if (act === 'done') { installed = true; store('av-installed', '1'); refreshInstallUi(); closeSheet(); toast('เรียบร้อย เปิดใช้จากไอคอนบนหน้าจอโฮมได้เลย'); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!sheetOpen) return;
+    if (e.key === 'Escape') return closeSheet();
+    if (e.key !== 'Tab') return;
+    var f = sheet.querySelectorAll('a[href], button');
+    if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  });
+  /* Chrome แจ้งว่าติดตั้งได้ = ยังไม่ได้ติดตั้งในเครื่องนี้ */
+  document.addEventListener('av-installable', function () {
+    if (installed) { installed = false; store('av-installed', '0'); }
+    refreshInstallUi();
+    if (sheetOpen) sheet.innerHTML = sheetHtml();
+  });
+  window.addEventListener('appinstalled', markInstalled);
+  refreshInstallUi();
+
+  /* ลิงก์ ...github.io/#install (จากปุ่มในเว็บแอป หรือจาก LINE) = เปิดแผ่นติดตั้งทันที */
+  if (location.hash === '#install') {
+    try { history.replaceState(null, '', location.pathname); } catch (e) { /* ไม่เป็นไร */ }
+    if (standalone) toast('ตอนนี้เปิดจากแอปอยู่แล้ว');
+    else setTimeout(function () { openSheet(); }, 350);
+  }
+
+  /* service worker: เงื่อนไขให้ Android ติดตั้งเป็นแอปได้ และเปิดหน้าแรกได้แม้เน็ตไม่ดี */
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname))) {
+    var reg = function () { navigator.serviceWorker.register('sw.js').catch(function () { /* ไม่เป็นไร */ }); };
+    if (document.readyState === 'complete') reg(); else window.addEventListener('load', reg);
+  }
 })();
 </script>
 </body>
