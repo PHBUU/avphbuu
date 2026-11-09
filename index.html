@@ -17,8 +17,9 @@
 <script>
   /* ===== ตั้งค่า: วาง URL เว็บแอป GAS (ที่ลงท้าย /exec) ===== */
   var CONFIG = {
-    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbxAbpvvc_4l2CEylQujU4K6p5qqsDAQtGFwlSN2gfUovxrwsk9JiC_JgVhpWtimP5bFtA/exec',
+    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbxMPHvxLbzslUUTbVDcRTNJyxojeBT619N_FA4O_eR_Oa8RS-aGgI0-cZfFd7wAmcOsIw/exec',
     APP: 'ฝ่ายโสตฯ',
+    DOMAIN: 'go.buu.ac.th',
     ORG: 'ฝ่ายโสตทัศนูปกรณ์ · คณะสาธารณสุขศาสตร์'
   };
   /* ===== มีพารามิเตอร์ (?room= ?id= ?t= ?page=) = มาจาก QR → พาไปเว็บแอปทันที ===== */
@@ -65,6 +66,7 @@ a{color:inherit;text-decoration:none}
 .dots span{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.35;animation:dot 1s ease-in-out infinite}
 .dots span:nth-child(2){animation-delay:.15s} .dots span:nth-child(3){animation-delay:.3s}
 @keyframes dot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.9;transform:translateY(-3px)}}
+.launch-link{font-size:14px;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .pill-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:#C2410C;color:#fff;font-weight:500;font-size:15px}
 
 /* ---------- home ---------- */
@@ -199,6 +201,7 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
   <div class="launch-sub" id="redirMsg">กำลังเปิด…</div>
   <div class="dots" id="spin" aria-hidden="true"><span></span><span></span><span></span></div>
   <a class="pill-btn" id="goLink" href="#" hidden>แตะเพื่อเปิด</a>
+  <a class="launch-link" id="loginLink" href="#" hidden>เปิดไม่ได้? เข้าสู่ระบบด้วยบัญชีมหาวิทยาลัย</a>
   <div class="notice" id="notReady" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน <b>CONFIG.GAS_URL</b> ของไฟล์ index.html</div>
 </div>
 
@@ -291,8 +294,13 @@ h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
     $('#launch').hidden = false;
     $('#launchName').textContent = CONFIG.APP;
     if (ready) {
+      $('#redirMsg').textContent = 'กำลังเปิด… ใช้บัญชี @' + CONFIG.DOMAIN;
       $('#goLink').href = window.__REDIRECT__;
-      setTimeout(function () { $('#goLink').hidden = false; }, 2500);
+      $('#loginLink').href = 'https://accounts.google.com/AccountChooser?continue=' + encodeURIComponent(window.__REDIRECT__);
+      var showHelp = function () { $('#goLink').hidden = false; $('#loginLink').hidden = false; };
+      setTimeout(showHelp, 2500);
+      /* กดย้อนกลับมาจากหน้า error ของ Google: โชว์ปุ่มช่วยทันที */
+      window.addEventListener('pageshow', function (e) { if (e.persisted) showHelp(); });
     } else {
       $('#spin').hidden = true;
       $('#redirMsg').textContent = 'ลิงก์นี้ถูกต้อง แต่ยังพาไปต่อไม่ได้';
