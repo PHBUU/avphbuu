@@ -8,7 +8,7 @@
 <script>
   /* ===== ตั้งค่า: วาง URL เว็บแอป GAS (ที่ลงท้าย /exec) ===== */
   var CONFIG = {
-    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbxcVC0Gs3dGIYe1elAbMx823I_kTHiOfJkxFD6oDe54mKfUVvApysamvX3QrIvuS2SK3A/exec',
+    GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbzoTo_JjNkNkpeu3m4k2YWn7HkwrvDQT4wcbog4H3UAhg5IYYEQudivv1qxcUiw9m0saQ/exec',
     ORG: 'ฝ่ายโสตทัศนูปกรณ์',
     SUB: 'คณะสาธารณสุขศาสตร์ มหาวิทยาลัยบูรพา'
   };
@@ -24,12 +24,12 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F4F6F8;--surface:#fff;--line:#E2E6EA;--ink:#1B2128;--ink-2:#3D4752;--muted:#5B6672;--accent:#0B6E6E;--accent-ink:#084F4F;--accent-soft:#E3F2F1;--warn-bg:#FDF1DC;--warn:#6B4100}
-:root:not([data-theme="light"]){color-scheme:light}
+[hidden]{display:none!important}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Thai',system-ui,sans-serif;line-height:1.55}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt',system-ui,sans-serif;line-height:1.6}
 a{color:var(--accent)}
 .wrap{max-width:760px;margin:0 auto;padding:16px}
 header.top{background:var(--accent);color:#fff}
@@ -69,10 +69,10 @@ details summary::after{content:'+';font-size:22px;color:var(--muted)} details[op
 </head>
 <body>
 <div id="redirect" class="wrap redirect" hidden>
-  <div class="spinner" aria-hidden="true"></div>
-  <p>กำลังพาไปยังระบบงานโสต…</p>
+  <div class="spinner" id="spin" aria-hidden="true"></div>
+  <p id="redirMsg">กำลังพาไปยังระบบงานโสต…</p>
   <a class="btn btn-primary" id="goLink" href="#">ถ้าไม่ไปเอง แตะที่นี่</a>
-  <p class="xs muted" id="notReady" hidden>ยังไม่ได้ตั้งค่า GAS_URL ในไฟล์ index.html</p>
+  <div class="notice" id="notReady" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน <b>CONFIG.GAS_URL</b> ของไฟล์ index.html หน้านี้เลยยังพาไปต่อไม่ได้</div>
 </div>
 
 <div id="home">
@@ -124,8 +124,14 @@ details summary::after{content:'+';font-size:22px;color:var(--muted)} details[op
   if (window.__REDIRECT__) {
     $('#home').hidden = true;
     $('#redirect').hidden = false;
-    $('#goLink').href = window.__REDIRECT__;
-    if (!ready) $('#notReady').hidden = false;
+    if (ready) {
+      $('#goLink').href = window.__REDIRECT__;
+    } else {
+      $('#spin').hidden = true;
+      $('#goLink').hidden = true;
+      $('#redirMsg').textContent = 'ลิงก์นี้ถูกต้อง แต่ยังพาไปต่อไม่ได้';
+      $('#notReady').hidden = false;
+    }
     return;
   }
 
