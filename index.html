@@ -3,14 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ฝ่ายโสตทัศนูปกรณ์ · คณะสาธารณสุขศาสตร์</title>
+<title>ฝ่ายโสตฯ · คณะสาธารณสุขศาสตร์</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ฝ่ายโสตฯ">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <script>
   /* ===== ตั้งค่า: วาง URL เว็บแอป GAS (ที่ลงท้าย /exec) ===== */
   var CONFIG = {
     GAS_URL: 'https://script.google.com/a/macros/go.buu.ac.th/s/AKfycbzoTo_JjNkNkpeu3m4k2YWn7HkwrvDQT4wcbog4H3UAhg5IYYEQudivv1qxcUiw9m0saQ/exec',
-    ORG: 'ฝ่ายโสตทัศนูปกรณ์',
-    SUB: 'คณะสาธารณสุขศาสตร์ มหาวิทยาลัยบูรพา'
+    APP: 'ฝ่ายโสตฯ',
+    ORG: 'ฝ่ายโสตทัศนูปกรณ์ · คณะสาธารณสุขศาสตร์'
   };
   /* ===== มีพารามิเตอร์ (?room= ?id= ?t= ?page=) = มาจาก QR → พาไปเว็บแอปทันที ===== */
   (function () {
@@ -24,88 +33,235 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F6F8;--surface:#fff;--line:#E2E6EA;--ink:#1B2128;--ink-2:#3D4752;--muted:#5B6672;--accent:#0B6E6E;--accent-ink:#084F4F;--accent-soft:#E3F2F1;--warn-bg:#FDF1DC;--warn:#6B4100}
+:root{
+  --bg:#F2F2F7; --card:#FFFFFF; --ink:#111113; --ink-2:#3A3A3F; --muted:#6C6C70; --sep:#E1E1E6;
+  --accent:#C2410C; --press:#E8E8ED; --tab:rgba(249,249,251,.82); --tab-line:rgba(0,0,0,.14);
+  --warn-bg:#FFF2DC; --warn:#6E4300;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#000000; --card:#1C1C1E; --ink:#F5F5F7; --ink-2:#E5E5EA; --muted:#A1A1A6; --sep:#38383A;
+    --accent:#FF9F43; --press:#2C2C2E; --tab:rgba(22,22,24,.82); --tab-line:rgba(255,255,255,.14);
+    --warn-bg:#3A2A10; --warn:#FFD28A;
+  }
+}
 [hidden]{display:none!important}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt',system-ui,sans-serif;line-height:1.6}
-a{color:var(--accent)}
-.wrap{max-width:760px;margin:0 auto;padding:16px}
-header.top{background:var(--accent);color:#fff}
-header.top .wrap{display:flex;align-items:center;gap:12px;padding:20px 16px}
-.mark{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt',-apple-system,system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid #FDBA74;outline-offset:3px;border-radius:12px}
 .ico{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-h1{margin:0;font-size:22px;font-weight:600;line-height:1.3} h2{margin:0;font-size:18px;font-weight:600}
-.sub{font-size:14px;opacity:.9}
-.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
-.tile{display:flex;flex-direction:column;gap:8px;padding:16px;min-height:128px;border-radius:16px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink)}
-.tile:hover{border-color:#AEB8C2;color:var(--ink)}
-.tile .t{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
-.tile b{font-size:16px;font-weight:600} .tile small{font-size:13px;color:var(--muted)}
-.notice{border-radius:12px;padding:12px 14px;font-size:14px;background:var(--warn-bg);color:var(--warn);margin-top:16px}
-.muted{color:var(--muted)} .small{font-size:14px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #CDD3D9;background:#fff;color:var(--ink);font:inherit;font-size:15px;cursor:pointer;text-decoration:none}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
-.btn-primary:hover{background:var(--accent-ink);color:#fff}
-.redirect{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
-.spinner{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-:focus-visible{outline:3px solid #7CC4C0;outline-offset:2px}
+
+/* ---------- launch screen (opened from a QR) ---------- */
+.launch{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center}
+.launch .app-icon{width:96px;height:96px;border-radius:22px;box-shadow:0 12px 30px rgba(234,88,12,.32)}
+.launch .app-icon .ico{width:50px;height:50px;stroke-width:1.8}
+.launch-name{font-size:22px;font-weight:600}
+.launch-sub{font-size:15px;color:var(--muted);margin-top:-8px}
+.dots{display:flex;gap:6px;margin-top:6px}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.35;animation:dot 1s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.15s} .dots span:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.9;transform:translateY(-3px)}}
+.pill-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:#C2410C;color:#fff;font-weight:500;font-size:15px}
+
+/* ---------- home ---------- */
+.home{max-width:560px;margin:0 auto;padding:calc(var(--safe-t) + 22px) 20px calc(110px + var(--safe-b))}
+.lt-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.eyebrow{margin:0;font-size:13px;font-weight:600;color:var(--muted)}
+h1{margin:2px 0 0;font-size:32px;font-weight:700;line-height:1.2}
+.org{margin:6px 0 0;font-size:14px;color:var(--muted)}
+.app-icon{display:flex;align-items:center;justify-content:center;color:#fff;border-radius:14px;background:linear-gradient(160deg,#FFA51F,#E8590C)}
+.avatar{width:44px;height:44px;border-radius:12px;flex:none}
+.avatar .ico{width:24px;height:24px}
+
+.notice{margin-top:16px;border-radius:14px;padding:12px 14px;font-size:14px;background:var(--warn-bg);color:var(--warn)}
+
+/* widget */
+.widget{position:relative;display:flex;align-items:center;gap:14px;margin-top:22px;padding:20px;border-radius:22px;color:#fff;
+  background:linear-gradient(120deg,#B93A0A 0%,#D9480F 50%,#F08C1C 100%);box-shadow:0 14px 34px -14px rgba(234,88,12,.7);overflow:hidden;transition:transform .15s}
+.widget:active{transform:scale(.98)}
+.widget::after{content:'';position:absolute;right:-40px;top:-50px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.08)}
+.w-text{flex:1;min-width:0;position:relative;z-index:1}
+.w-eyebrow{display:block;font-size:13px;font-weight:500;opacity:.85}
+.w-text b{display:block;font-size:20px;font-weight:600;line-height:1.3;margin-top:2px}
+.w-text small{display:block;font-size:13px;opacity:.88;margin-top:6px;line-height:1.45}
+.w-art{position:relative;z-index:1;width:76px;height:76px;flex:none;border-radius:18px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center}
+.w-art .ico{width:42px;height:42px;stroke-width:1.8}
+.w-cta{display:inline-flex;align-items:center;gap:4px;margin-top:12px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.2);font-size:13px;font-weight:500}
+.w-cta .ico{width:16px;height:16px}
+
+/* app grid */
+.sec{margin:28px 4px 12px;font-size:20px;font-weight:600}
+.apps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 6px}
+.app{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.app .app-icon{width:62px;height:62px;border-radius:15px;box-shadow:0 6px 14px -8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .15s}
+.app .app-icon .ico{width:30px;height:30px;stroke-width:1.9}
+.app:active .app-icon{transform:scale(.9)}
+.app-label{font-size:12.5px;line-height:1.3;color:var(--ink-2)}
+.g-teal{background:linear-gradient(160deg,#20B2AA,#0B6E6E)}
+.g-red{background:linear-gradient(160deg,#FF6B81,#E0245E)}
+.g-blue{background:linear-gradient(160deg,#5AC8FA,#0A6CFF)}
+.g-purple{background:linear-gradient(160deg,#D17BF7,#8A3FD6)}
+.g-green{background:linear-gradient(160deg,#5BD67A,#22A447)}
+.g-indigo{background:linear-gradient(160deg,#8E8BFF,#4B44D6)}
+
+/* grouped list */
+.group{margin:0;padding:0;list-style:none;background:var(--card);border-radius:14px;overflow:hidden}
+.cell{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 14px;transition:background .12s}
+.cell:active{background:var(--press)}
+.group li + li .cell-txt{border-top:1px solid var(--sep)}
+.cell-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.cell-ico .ico{width:19px;height:19px}
+.cell-txt{flex:1;min-width:0;display:flex;align-items:center;gap:8px;align-self:stretch;margin:-10px 0;padding:10px 0}
+.cell-txt span{flex:1;min-width:0}
+.cell-txt b{display:block;font-size:16px;font-weight:500}
+.cell-txt small{display:block;font-size:13px;color:var(--muted);line-height:1.4}
+.chev{width:18px;height:18px;color:var(--muted);opacity:.7}
+
+/* add to home screen */
+.a2hs{display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px;border-radius:16px;background:var(--card)}
+.a2hs .app-icon{width:44px;height:44px;border-radius:11px;flex:none}
+.a2hs .app-icon .ico{width:24px;height:24px}
+.a2hs b{display:block;font-size:15px;font-weight:600}
+.a2hs small{display:block;font-size:13px;color:var(--muted);line-height:1.45}
+.a2hs .share{width:16px;height:16px;vertical-align:-3px;color:#0A84FF}
+.x{width:36px;height:36px;border:none;border-radius:50%;background:var(--press);color:var(--muted);font:inherit;font-size:18px;cursor:pointer;flex:none}
+.foot{margin:26px 0 0;text-align:center;font-size:12px;color:var(--muted)}
+
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--tab);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--tab-line);padding-bottom:var(--safe-b)}
+.tabbar-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;padding-top:6px;font-size:11px;color:var(--muted)}
+.tab .ico{width:25px;height:25px;stroke-width:1.8}
+.tab.on{color:var(--accent);font-weight:600}
+
+@media (prefers-reduced-motion: no-preference){
+  .rise{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+  .rise:nth-child(2){animation-delay:.04s} .rise:nth-child(3){animation-delay:.08s} .rise:nth-child(4){animation-delay:.12s} .rise:nth-child(5){animation-delay:.16s} .rise:nth-child(6){animation-delay:.2s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+@media (min-width:600px){ h1{font-size:36px} .apps{gap:20px 10px} }
 </style>
 </head>
 <body>
-<div id="redirect" class="wrap redirect" hidden>
-  <div class="spinner" id="spin" aria-hidden="true"></div>
-  <p id="redirMsg">กำลังพาไปยังระบบงานโสต…</p>
-  <a class="btn btn-primary" id="goLink" href="#">ถ้าไม่ไปเอง แตะที่นี่</a>
-  <div class="notice" id="notReady" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน <b>CONFIG.GAS_URL</b> ของไฟล์ index.html หน้านี้เลยยังพาไปต่อไม่ได้</div>
+
+<!-- หน้าเปิดแอป: ขึ้นตอนสแกน QR แล้วกำลังพาไปเว็บแอป -->
+<div id="launch" class="launch" hidden>
+  <div class="app-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4M6 17v2M18 17v2"/></svg></div>
+  <div class="launch-name" id="launchName">ฝ่ายโสตฯ</div>
+  <div class="launch-sub" id="redirMsg">กำลังเปิด…</div>
+  <div class="dots" id="spin" aria-hidden="true"><span></span><span></span><span></span></div>
+  <a class="pill-btn" id="goLink" href="#" hidden>แตะเพื่อเปิด</a>
+  <div class="notice" id="notReady" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน <b>CONFIG.GAS_URL</b> ของไฟล์ index.html</div>
 </div>
 
-<div id="home">
-  <header class="top"><div class="wrap">
-    <span class="mark"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4"/></svg></span>
-    <div><h1 id="orgName">ฝ่ายโสตทัศนูปกรณ์</h1><div class="sub" id="orgSub"></div></div>
-  </div></header>
+<div id="home" class="home">
+  <header class="rise">
+    <div class="lt-row">
+      <div>
+        <p class="eyebrow" id="today">&nbsp;</p>
+        <h1 id="greet">สวัสดีครับ</h1>
+      </div>
+      <span class="app-icon avatar" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4"/></svg></span>
+    </div>
+    <p class="org" id="org">ฝ่ายโสตทัศนูปกรณ์ · คณะสาธารณสุขศาสตร์</p>
+  </header>
 
-  <main class="wrap">
-    <div class="notice no-print" id="cfgWarn" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน CONFIG.GAS_URL ของไฟล์ index.html ปุ่มด้านล่างจะยังใช้ไม่ได้</div>
+  <div class="notice" id="cfgWarn" hidden>ยังไม่ได้ใส่ URL เว็บแอปใน CONFIG.GAS_URL ของไฟล์ index.html ปุ่มต่าง ๆ จะยังใช้ไม่ได้</div>
 
-    <nav class="tiles no-print" aria-label="บริการ">
-      <a class="tile" data-page="borrow" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span><b>ยืมอุปกรณ์</b><small>ไมค์ โปรเจคเตอร์ ลำโพง กล้อง</small></a>
-      <a class="tile" data-page="pickRoom" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><b>แจ้งปัญหาห้องเรียน</b><small>ภาพไม่ขึ้น เสียงไม่มา ไมค์เสีย</small></a>
-      <a class="tile" data-page="rooms" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14" cy="12" r="1"/></svg></span><b>สถานะห้องเรียน</b><small>ห้องไหนพร้อมใช้ ห้องไหนกำลังซ่อม</small></a>
-      <a class="tile" data-page="service" href="#"><span class="t"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><b>ขอใช้บริการ</b><small>จัดห้องประชุม ถ่ายภาพ ไลฟ์ ผลิตสื่อ</small></a>
-    </nav>
+  <a class="widget rise" data-page="pickRoom" href="#">
+    <span class="w-text">
+      <span class="w-eyebrow">ห้องเรียนมีปัญหา?</span>
+      <b>สแกน QR บนโต๊ะผู้สอน</b>
+      <small>แจ้งได้ทันที ไม่ต้องลงแอป</small>
+      <span class="w-cta">หรือเลือกห้องเอง<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></span>
+    </span>
+    <span class="w-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><rect x="8" y="8" width="3" height="3"/><rect x="13" y="8" width="3" height="3"/><rect x="8" y="13" width="3" height="3"/><path d="M13 13h3v3"/></svg></span>
+  </a>
 
-    <p class="small muted" style="margin-top:16px">เห็น QR ในห้องเรียนหรือบนอุปกรณ์ สแกนด้วยกล้องมือถือได้เลย ไม่ต้องลงแอป</p>
-  </main>
+  <h2 class="sec rise">บริการ</h2>
+  <nav class="apps rise" aria-label="บริการ">
+    <a class="app" data-page="borrow" href="#"><span class="app-icon g-teal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span><span class="app-label">ยืมอุปกรณ์</span></a>
+    <a class="app" data-page="pickRoom" href="#"><span class="app-icon g-red"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span><span class="app-label">แจ้งปัญหา</span></a>
+    <a class="app" data-page="rooms" href="#"><span class="app-icon g-blue"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14" cy="12" r="1"/></svg></span><span class="app-label">สถานะห้อง</span></a>
+    <a class="app" data-page="service" href="#"><span class="app-icon g-purple"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="app-label">ขอบริการ</span></a>
+  </nav>
+
+  <h2 class="sec rise">ของฉัน</h2>
+  <ul class="group rise">
+    <li><a class="cell" data-page="mine" href="#"><span class="cell-ico g-green"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></span><span class="cell-txt"><span><b>รายการของฉัน</b><small>คำขอยืม งานแจ้งซ่อม และคำขอบริการ</small></span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></span></a></li>
+    <li><a class="cell" data-page="" href="#"><span class="cell-ico g-indigo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="cell-txt"><span><b>สำหรับเจ้าหน้าที่</b><small>หน้ารวมงานโสต ยืม-คืน งานซ่อม</small></span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></span></a></li>
+  </ul>
+
+  <div class="a2hs rise" id="a2hs" hidden>
+    <span class="app-icon" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="12" r="2.5"/><path d="M14 11h4M14 14h4"/></svg></span>
+    <div style="flex:1;min-width:0">
+      <b>ใช้เหมือนแอปบน iPhone</b>
+      <small>แตะ <svg class="ico share" viewBox="0 0 24 24" aria-label="ปุ่มแชร์"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg> แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"</small>
+    </div>
+    <button type="button" class="x" id="a2hsClose" aria-label="ปิดคำแนะนำ">×</button>
+  </div>
+
+  <p class="foot">ฝ่ายโสตทัศนูปกรณ์ คณะสาธารณสุขศาสตร์ มหาวิทยาลัยบูรพา</p>
 </div>
+
+<nav class="tabbar" id="tabbar" aria-label="เมนูหลัก">
+  <div class="tabbar-in">
+    <a class="tab on" href="./" aria-current="page"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>หน้าแรก</a>
+    <a class="tab" data-page="borrow" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>ยืม</a>
+    <a class="tab" data-page="pickRoom" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>แจ้งปัญหา</a>
+    <a class="tab" data-page="rooms" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14" cy="12" r="1"/></svg>ห้องเรียน</a>
+    <a class="tab" data-page="mine" href="#"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>ของฉัน</a>
+  </div>
+</nav>
 
 <script>
 (function () {
   var $ = function (s) { return document.querySelector(s); };
   var ready = CONFIG.GAS_URL.indexOf('วาง_ID') < 0;
 
+  /* มาจาก QR: แสดงหน้าเปิดแอประหว่างพาไปเว็บแอป */
   if (window.__REDIRECT__) {
     $('#home').hidden = true;
-    $('#redirect').hidden = false;
+    $('#tabbar').hidden = true;
+    $('#launch').hidden = false;
+    $('#launchName').textContent = CONFIG.APP;
     if (ready) {
       $('#goLink').href = window.__REDIRECT__;
+      setTimeout(function () { $('#goLink').hidden = false; }, 2500);
     } else {
       $('#spin').hidden = true;
-      $('#goLink').hidden = true;
       $('#redirMsg').textContent = 'ลิงก์นี้ถูกต้อง แต่ยังพาไปต่อไม่ได้';
       $('#notReady').hidden = false;
     }
     return;
   }
 
-  $('#orgName').textContent = CONFIG.ORG;
-  $('#orgSub').textContent = CONFIG.SUB;
+  /* หน้าแรก */
+  var now = new Date();
+  var h = now.getHours();
+  $('#greet').textContent = h >= 5 && h < 12 ? 'สวัสดีตอนเช้า' : h >= 12 && h < 17 ? 'สวัสดีตอนบ่าย' : h >= 17 && h < 21 ? 'สวัสดีตอนเย็น' : 'สวัสดีครับ';
+  try { $('#today').textContent = now.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long' }); } catch (e) { /* ปล่อยว่าง */ }
+  $('#org').textContent = CONFIG.ORG;
   if (!ready) $('#cfgWarn').hidden = false;
   Array.prototype.forEach.call(document.querySelectorAll('[data-page]'), function (a) {
-    a.href = CONFIG.GAS_URL + '?page=' + encodeURIComponent(a.dataset.page);
+    var p = a.getAttribute('data-page');
+    a.href = p ? CONFIG.GAS_URL + '?page=' + encodeURIComponent(p) : CONFIG.GAS_URL;
+  });
+
+  /* คำแนะนำ "เพิ่มไปยังหน้าจอโฮม" เฉพาะ iPhone/iPad ที่ยังไม่ได้ติดตั้ง */
+  var ua = navigator.userAgent;
+  var iOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var standalone = window.navigator.standalone === true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  var dismissed = false;
+  try { dismissed = localStorage.getItem('a2hs-off') === '1'; } catch (e) { /* ไม่มี storage */ }
+  if (iOS && !standalone && !dismissed) $('#a2hs').hidden = false;
+  $('#a2hsClose').addEventListener('click', function () {
+    $('#a2hs').hidden = true;
+    try { localStorage.setItem('a2hs-off', '1'); } catch (e) { /* ไม่มี storage */ }
   });
 })();
 </script>
